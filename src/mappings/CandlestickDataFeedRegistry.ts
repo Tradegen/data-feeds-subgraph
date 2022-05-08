@@ -52,5 +52,5 @@ export function handleNewCandlestickDataFeed(event: RegisteredDataFeed): void {
   // Create the tracked contract based on the template.
   CandlestickDataFeedTemplate.create(event.params.dataFeed);
 
-  log.error("CandlestickDataFeedRegistry: created pool template", [event.params.dataFeed.toHexString()]);
+  log.error("CandlestickDataFeedRegistry: created candlestick data feed template", [event.params.dataFeed.toHexString()]);
 }
