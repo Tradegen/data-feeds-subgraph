@@ -1,0 +1,95 @@
+specVersion: 0.0.1
+description: Tradegen is a decentralized asset management and algo trading platform on Celo.
+repository: https://github.com/Tradegen/tradegen-data-feeds-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: BotPerformanceDataFeedRegistry
+    network: celo-alfajores
+    source:
+      address: "0x8F51B3Ce8c8752077c81873d2CAd65a1b8e1156d"
+      abi: BotPerformanceDataFeedRegistry
+      startBlock: 11335272
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/BotPerformanceDataFeedRegistry.ts
+      entities:
+        - BotPerformanceDataFeed
+      abis:
+        - name: BotPerformanceDataFeedRegistry
+          file: ./abis/BotPerformanceDataFeedRegistry.json
+        - name: BotPerformanceDataFeed
+          file: ./abis/BotPerformanceDataFeed.json
+      eventHandlers:
+        - event: RegisteredDataFeed(address,uint256,address,address)
+          handler: handleNewBotPerformanceDataFeed
+  - kind: ethereum/contract
+    name: CandlestickDataFeedRegistry
+    network: celo-alfajores
+    source:
+      address: "0x1f19A758382F51811C5D429F30Ad78192C377383"
+      abi: CandlestickDataFeedRegistry
+      startBlock: 11230336
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/CandlestickDataFeedRegistry.ts
+      entities:
+        - CandlestickDataFeed
+      abis:
+        - name: CandlestickDataFeedRegistry
+          file: ./abis/CandlestickDataFeedRegistry.json
+        - name: CandlestickDataFeed
+          file: ./abis/CandlestickDataFeed.json
+      eventHandlers:
+        - event: RegisteredDataFeed(string,uint256,address,address)
+          handler: handleNewCandlestickDataFeed
+templates:
+  - kind: ethereum/contract
+    name: BotPerformanceDataFeed
+    network: celo-alfajores
+    source:
+      abi: BotPerformanceDataFeed
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/BotPerformanceDataFeed.ts
+      entities:
+        - BotPerformanceDataFeed
+      abis:
+        - name: BotPerformanceDataFeed
+          file: ./abis/BotPerformanceDataFeed.json
+        - name: BotPerformanceDataFeedRegistry
+          file: ./abis/BotPerformanceDataFeedRegistry.json
+      eventHandlers:
+        - event: UpdatedData(uint256,string,bool,uint256,uint256)
+          handler: handleUpdatedData
+        - event: UpdatedUsageFee(uint256)
+          handler: handleUpdatedUsageFee
+        - event: GetTokenPrice(address,uint256,uint256)
+          handler: handleGetTokenPrice
+  - kind: ethereum/contract
+    name: CandlestickDataFeed
+    network: celo-alfajores
+    source:
+      abi: CandlestickDataFeed
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/CandlestickDataFeed.ts
+      entities:
+        - CandlestickDataFeed
+      abis:
+        - name: CandlestickDataFeed
+          file: ./abis/CandlestickDataFeed.json
+        - name: CandlestickDataFeedRegistry
+          file: ./abis/CandlestickDataFeedRegistry.json
+      eventHandlers:
+        - event: UpdatedData(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
+          handler: handleUpdatedData

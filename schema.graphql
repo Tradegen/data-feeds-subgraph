@@ -1,0 +1,318 @@
+type Tradegen @entity {
+  # AddressResolver contract address
+  id: ID!
+
+  # pool info
+  poolCount: Int!
+  NFTPoolCount: Int!
+
+  # total volume
+  totalVolumeUSD: BigDecimal!
+
+  # total value locked
+  totalValueLockedUSD: BigDecimal!
+
+  # transactions
+  txCount: BigInt!
+}
+
+type Pool @entity {
+  # pool address
+  id: ID!
+
+  # mirrored from the smart contract
+  name: String!
+  manager: String!
+  performanceFee: BigInt!
+  tokenPrice: BigInt!
+
+  # used for other stats like marketcap
+  totalSupply: BigInt!
+
+  # pool specific volume
+  tradeVolumeUSD: BigDecimal!
+
+  # total fees collected in USD
+  feesCollected: BigDecimal!
+
+  # TVL
+  totalValueLockedUSD: BigDecimal!
+
+  # positions
+  positionAddresses: [String!]
+  positionBalances: [BigInt!]
+
+  # derived fields
+  poolDayData: [PoolDayData!]! @derivedFrom(field: "pool")
+  transactions: [PoolTransaction!]! @derivedFrom(field: "pool")
+}
+
+type NFTPool @entity {
+  # NFT pool address
+  id: ID!
+
+  # mirrored from the smart contract
+  name: String!
+  manager: String!
+  maxSupply: BigInt!
+  seedPrice: BigInt!
+  tokenPrice: BigInt!
+
+  # used for other stats like marketcap
+  totalSupply: BigInt!
+
+  # pool specific volume
+  tradeVolumeUSD: BigDecimal!
+
+  # total fees collected in USD
+  feesCollected: BigDecimal!
+
+  # TVL
+  totalValueLockedUSD: BigDecimal!
+
+  # positions
+  positionAddresses: [String!]
+  positionBalances: [BigInt!]
+
+  # derived fields
+  poolDayData: [NFTPoolDayData!]! @derivedFrom(field: "NFTPool")
+  transactions: [NFTPoolTransaction!]! @derivedFrom(field: "NFTPool")
+}
+
+type PoolLookup @entity {
+  id: ID!
+  poolAddress: Pool!
+}
+
+type NFTPoolLookup @entity {
+  id: ID!
+  NFTPoolAddress: NFTPool!
+}
+
+type User @entity {
+  id: ID!
+  poolPositions: [PoolPosition!]! @derivedFrom(field: "user")
+  NFTPoolPositions: [NFTPoolPosition!]! @derivedFrom(field: "user")
+  managedInvestments: [ManagedInvestment!]! @derivedFrom(field: "manager")
+  feesEarned: BigDecimal!
+}
+
+type PoolPosition @entity {
+  id: ID!
+  user: User!
+  pool: Pool!
+  tokenBalance: BigInt!
+  USDValue: BigInt!
+}
+
+type NFTPoolPosition @entity {
+  id: ID!
+  user: User!
+  NFTPool: NFTPool!
+  tokenBalance: BigInt!
+  USDValue: BigInt!
+}
+
+type PoolTransaction @entity {
+  # transaction hash
+  id: ID!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  pool: Pool!
+  create: CreatePool
+  deposit: DepositPool
+  withdraw: WithdrawPool
+  mintFee: MintFeePool
+}
+
+type NFTPoolTransaction @entity {
+  # transaction hash
+  id: ID!
+  blockNumber: BigInt!
+  timestamp: BigInt!
+  NFTPool: NFTPool!
+  create: CreateNFTPool
+  deposit: DepositNFTPool
+  withdraw: WithdrawNFTPool
+}
+
+type CreatePool @entity {
+  # PoolTransaction ID + "-create"
+  id: ID!
+  poolTransaction: PoolTransaction!
+  timestamp: BigInt! # need this to pull recent txns for specific pool or NFT pool
+
+  manager: String!
+  poolAddress: String!
+  poolIndex: BigInt! # index in PoolFactory pools array
+}
+
+type CreateNFTPool @entity {
+  # NFTPoolTransaction ID + "-create"
+  id: ID!
+  NFTPoolTransaction: NFTPoolTransaction!
+  timestamp: BigInt! # need this to pull recent txns for specific pool or NFT pool
+
+  manager: String!
+  NFTPoolAddress: String!
+  NFTPoolIndex: BigInt! # index in NFTPoolFactory pools array
+  
+  seedPrice: BigInt!
+  maxSupply: BigInt!
+}
+
+type DepositPool @entity {
+  # PoolTransaction ID + "-deposit"
+  id: ID!
+  poolTransaction: PoolTransaction!
+  timestamp: BigInt! # need this to pull recent txns for specific pool or NFT pool
+
+  userAddress: String!
+  poolAddress: String!
+  amount: BigInt! # USD amount invested
+}
+
+type DepositNFTPool @entity {
+  # NFTPoolTransaction ID + "-deposit"
+  id: ID!
+  NFTPoolTransaction: NFTPoolTransaction!
+  timestamp: BigInt! # need this to pull recent txns for specific pool or NFT pool
+
+  userAddress: String!
+  NFTPoolAddress: String!
+  tokenAmount: BigInt! # number of tokens purchased
+  USDAmount: BigInt! # amount of USD invested
+}
+
+type WithdrawPool @entity {
+  # PoolTransaction ID + "-withdraw"
+  id: ID!
+  poolTransaction: PoolTransaction!
+  timestamp: BigInt! # need this to pull recent txns for specific pool or NFT pool
+
+  userAddress: String!
+  poolAddress: String!
+  tokenAmount: BigInt! # number of pool tokens withdrawn
+  USDAmount: BigDecimal! # amount of USD withdrawn
+}
+
+type WithdrawNFTPool @entity {
+  # NFTPoolTransaction ID + "-withdraw"
+  id: ID!
+  NFTPoolTransaction: NFTPoolTransaction!
+  timestamp: BigInt! # need this to pull recent txns for specific pool or NFT pool
+
+  userAddress: String!
+  NFTPoolAddress: String!
+  tokenAmount: BigInt! # number of NFT pool tokens withdrawn
+  USDAmount: BigDecimal! # amount of USD withdrawn
+}
+
+type MintFeePool @entity {
+  # PoolTransaction ID + "-mintFee"
+  id: ID!
+  poolTransaction: PoolTransaction!
+  timestamp: BigInt! # need this to pull recent txns for specific pool or NFT pool
+
+  managerAddress: String!
+  poolAddress: String!
+  feesMinted: BigInt! # number of pool tokens minted as performance fee
+  tokenPrice: BigInt!
+}
+
+type ManagedInvestment @entity {
+  id: ID!
+  pool: Pool
+  NFTPool: NFTPool
+  manager: User! # address of investment's manager
+}
+
+# Data accumulated and condensed into day stats for all of Tradegen
+type TradegenDayData @entity {
+  id: ID! # timestamp rounded to current day by dividing by 86400
+  date: Int!
+
+  dailyVolumeUSD: BigDecimal!
+  totalVolumeUSD: BigDecimal! # Accumulate at each trade, not just calculated off whatever totalVolume is. making it more accurate as it is a live conversion
+  totalValueLockedUSD: BigDecimal!
+
+  txCount: BigInt!
+}
+
+type PoolHourData @entity {
+  id: ID!
+  hourStartUnix: Int! # unix timestamp for start of hour
+  pool: Pool!
+
+  totalSupply: BigInt!
+  tokenPrice: BigInt!
+  totalValueLockedUSD: BigDecimal!
+
+  # volume stats
+  hourlyVolumeUSD: BigDecimal!
+  hourlyTxns: BigInt!
+
+  # positions
+  positionAddresses: [String!]
+  positionBalances: [BigInt!]
+}
+
+type NFTPoolHourData @entity {
+  id: ID!
+  hourStartUnix: Int! # unix timestamp for start of hour
+  NFTPool: NFTPool!
+
+  totalSupply: BigInt!
+  tokenPrice: BigInt!
+  totalValueLockedUSD: BigDecimal!
+
+  # volume stats
+  hourlyVolumeUSD: BigDecimal!
+  hourlyTxns: BigInt!
+
+  # positions
+  positionAddresses: [String!]
+  positionBalances: [BigInt!]
+}
+
+type PoolDayData @entity {
+  id: ID!
+  date: Int!
+  pool: Pool!
+
+  # volume stats
+  dailyVolumeUSD: BigDecimal!
+  dailyTxns: BigInt!
+
+  # TVL stats
+  totalValueLockedUSD: BigDecimal!
+  totalSupply: BigInt!
+
+  # price stats
+  priceUSD: BigInt!
+
+  # positions
+  positionAddresses: [String!]
+  positionBalances: [BigInt!]
+}
+
+type NFTPoolDayData @entity {
+  id: ID!
+  date: Int!
+  NFTPool: NFTPool!
+
+  # volume stats
+  dailyVolumeUSD: BigDecimal!
+  dailyTxns: BigInt!
+
+  # TVL stats
+  totalValueLockedUSD: BigDecimal!
+  totalSupply: BigInt!
+
+  # price stats
+  priceUSD: BigInt!
+
+  # positions
+  positionAddresses: [String!]
+  positionBalances: [BigInt!]
+}
