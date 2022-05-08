@@ -88,9 +88,9 @@ type BotPerformanceDataFeed @entity {
   revenue: BigInt!
 
   # Derived fields.
-  botPerformanceDayData: [BotPerformanceDayData!]! @derivedFrom(field: "botPerformanceDataFeed")
+  tradingBotDayData: [TradingBotDayData!]! @derivedFrom(field: "botPerformanceDataFeed")
   orders: [Order!]! @derivedFrom(field: "botPerformanceDataFeed")
-  dataRequests: [DataRequests!]! @derivedFrom(field: "botPerformanceDataFeed")
+  dataRequests: [DataRequest!]! @derivedFrom(field: "botPerformanceDataFeed")
 }
 
 type Candlestick @entity {
