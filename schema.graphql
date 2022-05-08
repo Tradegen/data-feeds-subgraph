@@ -20,7 +20,7 @@ type Tradegen @entity {
 
   # Total revenue (in TGEN).
   # This value tracks the total amount of usage fees paid.
-  totalRevenue: Int!
+  totalRevenue: BigInt!
 }
 
 type CandlestickDataFeed @entity {
