@@ -1,18 +1,13 @@
-import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import {
   CandlestickDataFeed,
   Candlestick,
   Tradegen,
-  BotPerformanceDataFeed
 } from "../types/schema";
 import {
   UpdatedData
 } from "../types/templates/CandlestickDataFeed/CandlestickDataFeed";
 import {
   CANDLESTICK_DATA_FEED_REGISTRY_ADDRESS,
-  ONE_BI,
-  ZERO_BD,
-  ZERO_BI
 } from "./helpers";
 import {
     updateTradegenDayData,
