@@ -21,9 +21,12 @@ export function handleNewBotPerformanceDataFeed(event: RegisteredDataFeed): void
     tradegen = new Tradegen(CANDLESTICK_DATA_FEED_REGISTRY_ADDRESS);
     tradegen.candlestickDataFeedCount = 0;
     tradegen.botPerformanceDataFeedCount = 0;
+    tradegen.VTEDataFeedCount = 0;
     tradegen.candlestickDataFeedUpdateCount = 0;
     tradegen.botPerformanceDataFeedUpdateCount = 0;
-    tradegen.dataRequestCount = 0;
+    tradegen.VTEDataFeedUpdateCount = 0;
+    tradegen.botDataRequestCount = 0;
+    tradegen.VTEDataRequestCount = 0;
     tradegen.totalRevenue = ZERO_BI;
   }
   
