@@ -1,8 +1,8 @@
 # Tradegen Data Feeds Subgraph
 
-[Tradegen](https://tradegen.io/) is a decentralized asset management and algo trading platform on Celo.
+Tradegen is a decentralized trading platform that focuses on asset management, algo trading, and virtual trading.
 
-This subgraph dynamically tracks updates to candlestick and bot performance data feeds on Tradegen. 
+This subgraph dynamically tracks updates to candlestick, bot performance, and VTE data feeds on Tradegen. 
 
 ## Running Locally
 
