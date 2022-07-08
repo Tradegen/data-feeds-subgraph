@@ -3,14 +3,14 @@ import {
     BigDecimal,
     BigInt
   } from "@graphprotocol/graph-ts";
-import { CandlestickDataFeed as CandlestickDataFeedContract} from "../types/templates/CandlestickDataFeed/CandlestickDataFeed";
-import { BotPerformanceDataFeed as BotPerformanceDataFeedContract} from "../types/templates/BotPerformanceDataFeed/BotPerformanceDataFeed";
 import { CandlestickDataFeedRegistry } from "../types/CandlestickDataFeedRegistry/CandlestickDataFeedRegistry";
 import { BotPerformanceDataFeedRegistry } from "../types/BotPerformanceDataFeedRegistry/BotPerformanceDataFeedRegistry";
+import { VTEDataFeedRegistry } from "../types/VTEDataFeedRegistry/VTEDataFeedRegistry";
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
 export const CANDLESTICK_DATA_FEED_REGISTRY_ADDRESS = "0x1f19A758382F51811C5D429F30Ad78192C377383";
 export const BOT_PERFORMANCE_DATA_FEED_REGISTRY_ADDRESS = "0x8F51B3Ce8c8752077c81873d2CAd65a1b8e1156d";
+export const VTE_DATA_FEED_REGISTRY_ADDRESS = "0xD5ac9fBe8Ae711bf228Ed9a9B9B76D6731808dD5";
 
 export const cUSD = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
@@ -26,6 +26,10 @@ export let candlestickDataFeedRegistryContract = CandlestickDataFeedRegistry.bin
 
 export let botPerformanceDataFeedContract = BotPerformanceDataFeedRegistry.bind(
     Address.fromString(BOT_PERFORMANCE_DATA_FEED_REGISTRY_ADDRESS)
+);
+
+export let VTEDataFeedContract = VTEDataFeedRegistry.bind(
+    Address.fromString(VTE_DATA_FEED_REGISTRY_ADDRESS)
 );
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
