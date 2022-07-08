@@ -69,7 +69,7 @@ dataSources:
           file: ./abis/VTEDataFeed.json
       eventHandlers:
         - event: RegisteredDataFeed(address,uint256,address,address)
-          handler: handleNewBotPerformanceDataFeed
+          handler: handleNewVTEDataFeed
 templates:
   - kind: ethereum/contract
     name: BotPerformanceDataFeed
