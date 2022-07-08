@@ -48,6 +48,28 @@ dataSources:
       eventHandlers:
         - event: RegisteredDataFeed(string,uint256,address,address)
           handler: handleNewCandlestickDataFeed
+  - kind: ethereum/contract
+    name: VTEDataFeedRegistry
+    network: celo-alfajores
+    source:
+      address: "0xD5ac9fBe8Ae711bf228Ed9a9B9B76D6731808dD5"
+      abi: VTEDataFeedRegistry
+      startBlock: 12377530
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/VTEDataFeedRegistry.ts
+      entities:
+        - VTEDataFeed
+      abis:
+        - name: VTEDataFeedRegistry
+          file: ./abis/VTEDataFeedRegistry.json
+        - name: VTEDataFeed
+          file: ./abis/VTEDataFeed.json
+      eventHandlers:
+        - event: RegisteredDataFeed(address,uint256,address,address)
+          handler: handleNewBotPerformanceDataFeed
 templates:
   - kind: ethereum/contract
     name: BotPerformanceDataFeed
@@ -93,3 +115,27 @@ templates:
       eventHandlers:
         - event: UpdatedData(uint256,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleUpdatedData
+  - kind: ethereum/contract
+    name: VTEDataFeed
+    network: celo-alfajores
+    source:
+      abi: VTEDataFeed
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/VTEDataFeed.ts
+      entities:
+        - VTEDataFeed
+      abis:
+        - name: VTEDataFeed
+          file: ./abis/VTEDataFeed.json
+        - name: VTEDataFeedRegistry
+          file: ./abis/VTEDataFeedRegistry.json
+      eventHandlers:
+        - event: UpdatedData(uint256,string,bool,uint256,uint256,uint256)
+          handler: handleUpdatedData
+        - event: UpdatedUsageFee(uint256)
+          handler: handleUpdatedUsageFee
+        - event: GetTokenPrice(address,uint256,uint256)
+          handler: handleGetTokenPrice
