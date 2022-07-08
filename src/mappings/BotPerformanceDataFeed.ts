@@ -70,7 +70,7 @@ export function handleGetTokenPrice(event: GetTokenPrice): void {
 
     // Update global values.
     let tradegen = Tradegen.load(CANDLESTICK_DATA_FEED_REGISTRY_ADDRESS);
-    tradegen.dataRequestCount = tradegen.dataRequestCount + 1;
+    tradegen.botDataRequestCount = tradegen.botDataRequestCount + 1;
     tradegen.totalRevenue = tradegen.totalRevenue.plus(BigInt.fromString(event.params.amountPaid.toString()))
     tradegen.save();
 
@@ -86,7 +86,7 @@ export function handleGetTokenPrice(event: GetTokenPrice): void {
 
     // Update day entities.
     let tradegenDayData = updateTradegenDayData(event);
-    tradegenDayData.dataRequestCount = tradegenDayData.dataRequestCount + 1;
+    tradegenDayData.botDataRequestCount = tradegenDayData.botDataRequestCount + 1;
     tradegenDayData.save();
 
     let tradingBotDayData = updateTradingBotDayData(event, true, event.params.tokenPrice, event.params.amountPaid);

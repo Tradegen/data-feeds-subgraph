@@ -247,7 +247,10 @@ type DataRequest @entity {
   feePaid: BigInt!
 
   # The price of the trading bot at the time the data request was made.
-  botPrice: BigInt!
+  botPrice: BigInt
+
+  # The price of the VTE at the time the data request was made.
+  VTEPrice: BigInt
 }
 
 # Data accumulated and condensed into day stats for all of Tradegen.
