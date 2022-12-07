@@ -28,7 +28,7 @@ type Tradegen @entity {
   # This value gets incremented whenever VTEDataFeed.getTokenPrice() is called.
   VTEDataRequestCount: Int!
 
-  # Total revenue (in TGEN).
+  # Total revenue (in protocol's governance token).
   # This value tracks the total amount of usage fees paid.
   totalRevenue: BigInt!
 }
@@ -82,7 +82,8 @@ type BotPerformanceDataFeed @entity {
   # Address of the trading bot.
   tradingBot: String!
 
-  # The fee, in TGEN, that a contract pays when requesting data.
+  # The fee that a contract pays when requesting data.
+  # Measured in protocol's governance token.
   usageFee: BigInt!
 
   # Total number of updates to this data feed.
@@ -116,7 +117,8 @@ type VTEDataFeed @entity {
   # Address of the VTE.
   VTE: String!
 
-  # The fee, in TGEN, that a contract pays when requesting data.
+  # The fee that a contract pays when requesting data.
+  # Measured in the protocol's governance token.
   usageFee: BigInt!
 
   # Total number of updates to this data feed.
