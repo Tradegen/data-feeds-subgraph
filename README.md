@@ -2,12 +2,10 @@
 
 This subgraph dynamically tracks the data feeds and updates in the [Tradegen data platform](https://github.com/Tradegen/data-feeds).
 
-- aggregated data across pools,
-- data on individual pools,
-- data on individual transactions,
-- data on each user's positions and aggregated performance,
-- data on each position in a pool,
-- historical data on each pool and position
+- aggregated data across data feeds,
+- data on individual data feeds,
+- data on individual candlesticks, orders, and requests
+- historical data on each trading bot and VTE (virtual trading environment)
 
 ## Running Locally
 
